@@ -1,0 +1,21 @@
+nohup: ignoring input
+ * Serving Flask app 'main'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 719-206-008
+127.0.0.1 - - [28/Aug/2025 04:08:10] "[35m[1mPOST /api/posts/generate HTTP/1.1[0m" 500 -
+ * Detected change in '/home/ubuntu/x_creator_backend/src/services/ai_service.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 719-206-008
+127.0.0.1 - - [28/Aug/2025 04:08:49] "POST /api/posts/generate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Aug/2025 04:09:44] "OPTIONS /api/posts/generate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Aug/2025 04:09:45] "POST /api/posts/generate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Aug/2025 04:09:59] "OPTIONS /api/posts/hashtags HTTP/1.1" 200 -
+127.0.0.1 - - [28/Aug/2025 04:10:00] "POST /api/posts/hashtags HTTP/1.1" 200 -

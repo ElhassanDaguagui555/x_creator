@@ -1,0 +1,13 @@
+nohup: ignoring input
+
+> x_creator_frontend@0.0.0 dev /home/ubuntu/x_creator_frontend
+> vite --host
+
+
+  VITE v6.3.5  ready in 549 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://169.254.0.21:5173/
+4:09:24 AM [vite] (client) hmr update /src/components/PostGenerator.jsx, /src/App.css
+4:09:28 AM [vite] (client) hmr update /src/components/PostGenerator.jsx, /src/App.css
+4:09:32 AM [vite] (client) hmr update /src/components/PostGenerator.jsx, /src/App.css
