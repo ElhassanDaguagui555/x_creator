@@ -16,18 +16,8 @@ class AIService:
                             tone: str = "professional", max_length: int = 280) -> Dict:
         """
         Génère du contenu de post basé sur un prompt utilisateur.
-        
-        Args:
-            prompt: Le prompt de l'utilisateur décrivant ce qu'il veut publier
-            platform: La plateforme cible (x, facebook, instagram, linkedin)
-            tone: Le ton souhaité (professional, casual, humorous, etc.)
-            max_length: Longueur maximale du contenu
-            
-        Returns:
-            Dict contenant le contenu généré et les métadonnées
         """
         try:
-            # Adapter le prompt selon la plateforme
             platform_instructions = self._get_platform_instructions(platform, max_length)
             
             system_prompt = f"""Tu es un expert en création de contenu pour les médias sociaux. 
@@ -67,14 +57,6 @@ class AIService:
     def generate_hashtags(self, content: str, platform: str = "general", count: int = 5) -> List[str]:
         """
         Génère des hashtags pertinents pour un contenu donné.
-        
-        Args:
-            content: Le contenu du post
-            platform: La plateforme cible
-            count: Nombre de hashtags à générer
-            
-        Returns:
-            Liste des hashtags générés
         """
         try:
             system_prompt = f"""Génère {count} hashtags pertinents et populaires pour ce contenu sur {platform}.
@@ -102,20 +84,14 @@ class AIService:
     def improve_content(self, content: str, improvement_type: str = "engagement") -> Dict:
         """
         Améliore un contenu existant selon un type d'amélioration spécifique.
-        
-        Args:
-            content: Le contenu à améliorer
-            improvement_type: Type d'amélioration (engagement, clarity, tone, etc.)
-            
-        Returns:
-            Dict contenant le contenu amélioré
         """
         try:
             improvement_instructions = {
                 "engagement": "Rends ce contenu plus engageant et accrocheur",
                 "clarity": "Améliore la clarté et la lisibilité de ce contenu",
                 "tone": "Ajuste le ton pour qu'il soit plus professionnel",
-                "brevity": "Raccourcis ce contenu tout en gardant l'essentiel"
+                "brevity": "Raccourcis ce contenu tout en gardant l'essentiel",
+                "positive": "Rends ce contenu plus positif et optimiste"
             }
             
             instruction = improvement_instructions.get(improvement_type, 
@@ -145,6 +121,71 @@ class AIService:
                 "improved_content": None
             }
     
+    def analyze_sentiment(self, content: str) -> Dict:
+        """
+        Analyse le sentiment d'un contenu donné (positif, négatif, neutre).
+        """
+        try:
+            system_prompt = """Analyse le sentiment du contenu suivant et retourne uniquement l'un des mots suivants : 'positive', 'negative', 'neutral'.
+            Ne donne aucune explication, juste le mot correspondant au sentiment dominant."""
+            
+            response = self.model.generate_content(
+                [system_prompt, f"Contenu: {content}"]
+            )
+            
+            sentiment = response.text.strip().lower()
+            if sentiment not in ['positive', 'negative', 'neutral']:
+                sentiment = 'neutral'
+            
+            return {
+                "success": True,
+                "sentiment": sentiment,
+                "content": content
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "error": str(e),
+                "sentiment": None
+            }
+    
+    def suggest_content(self, previous_posts: List[str], count: int = 3) -> Dict:
+        """
+        Suggère des idées de contenu basées sur les posts précédents.
+        """
+        try:
+            system_prompt = f"""Tu es un expert en création de contenu pour les médias sociaux.
+            En te basant sur les posts précédents de l'utilisateur, suggère {count} idées de contenu originales et engageantes.
+            Les idées doivent être:
+            - Similaires en style et thématique aux posts précédents
+            - Innovantes et variées
+            - Formulées comme des prompts courts pour générer un nouveau post
+            
+            Posts précédents:
+            {json.dumps(previous_posts, ensure_ascii=False)}
+            
+            Retourne uniquement une liste de {count} prompts, un par ligne."""
+            
+            response = self.model.generate_content(
+                [system_prompt]
+            )
+            
+            suggestions_text = response.text.strip()
+            suggestions = suggestions_text.split("\n")[:count]
+            
+            return {
+                "success": True,
+                "suggestions": suggestions
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "error": str(e),
+                "suggestions": []
+            }
+    
     def _get_platform_instructions(self, platform: str, max_length: int) -> str:
         """
         Retourne les instructions spécifiques à chaque plateforme.
@@ -158,5 +199,3 @@ class AIService:
         }
         
         return instructions.get(platform, instructions["general"])
-
-

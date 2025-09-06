@@ -6,20 +6,17 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    platform = db.Column(db.String(50), nullable=False)  # x, facebook, instagram, linkedin, etc.
-    status = db.Column(db.String(20), default='draft')  # draft, scheduled, published, failed
+    platform = db.Column(db.String(50), nullable=False)
+    platform_account = db.Column(db.String(100), nullable=True)  # Nom du compte sur la plateforme
+    status = db.Column(db.String(20), default='draft')
     scheduled_at = db.Column(db.DateTime, nullable=True)
     published_at = db.Column(db.DateTime, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
-    # Champs pour l'IA
     ai_generated = db.Column(db.Boolean, default=False)
     ai_prompt = db.Column(db.Text, nullable=True)
-    
-    # Métadonnées pour les médias
-    media_urls = db.Column(db.Text, nullable=True)  # JSON string pour stocker les URLs des médias
-    
+    media_urls = db.Column(db.Text, nullable=True)
+
     def __repr__(self):
         return f'<Post {self.id} by User {self.user_id}>'
 
@@ -29,6 +26,7 @@ class Post(db.Model):
             'user_id': self.user_id,
             'content': self.content,
             'platform': self.platform,
+            'platform_account': self.platform_account,
             'status': self.status,
             'scheduled_at': self.scheduled_at.isoformat() if self.scheduled_at else None,
             'published_at': self.published_at.isoformat() if self.published_at else None,
@@ -38,4 +36,3 @@ class Post(db.Model):
             'ai_prompt': self.ai_prompt,
             'media_urls': self.media_urls
         }
-

@@ -129,7 +129,7 @@
             }
             try {
                 const response = await fetch(`${API_BASE_URL}/${userId}`);
-                 if (response.status === 404) throw new Error('User not found');
+                if (response.status === 404) throw new Error('User not found');
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const data = await response.json();
                 displayResult(resultElementId, data);
@@ -152,8 +152,8 @@
             if (username) updateData.username = username;
             if (email) updateData.email = email;
             if (Object.keys(updateData).length === 0) {
-                 displayError(resultElementId, 'Please enter a username or email to update');
-                 return;
+                displayError(resultElementId, 'Please enter a username or email to update');
+                return;
             }
 
             try {
@@ -164,7 +164,7 @@
                 });
                 if (response.status === 404) throw new Error('User not found');
                 const data = await response.json();
-                 if (!response.ok) throw new Error(data.message || `HTTP error! status: ${response.status}`);
+                if (!response.ok) throw new Error(data.message || `HTTP error! status: ${response.status}`);
                 displayResult(resultElementId, data);
                  // Clear input fields
                 document.getElementById('update-username').value = '';
@@ -190,11 +190,11 @@
                 if (!response.ok && response.status !== 204) throw new Error(`HTTP error! status: ${response.status}`); // Allow 204
                 // 204 No Content indicates success
                 if (response.status === 204) {
-                     displayResult(resultElementId, { message: `User ID ${userId} has been successfully deleted` });
+                    displayResult(resultElementId, { message: `User ID ${userId} has been successfully deleted` });
                 } else {
                      // Try to read potential error message even on success-like status if not 204
-                     const data = await response.text();
-                     displayResult(resultElementId, data || { message: `Deletion successful, status code: ${response.status}` });
+                    const data = await response.text();
+                    displayResult(resultElementId, data || { message: `Deletion successful, status code: ${response.status}` });
                 }
                  // Clear input field
                 document.getElementById('delete-user-id').value = '';
